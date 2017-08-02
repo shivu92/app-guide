@@ -71,11 +71,8 @@ public class LoginControl extends Application {
         params.put("key",GlobalController.API_KEY);
         params.put("email_id", userEmail);
         params.put("password",userPassword);
-       /* params.put("email_id", "androidtest@gmail.com");
-        params.put("password","12345678");*/
-
-        params.put("ip", GlobalController.divice_ip);
-
+       
+       
 
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
@@ -86,51 +83,6 @@ public class LoginControl extends Application {
                     public void onResponse(JSONObject response) {
                         try {
 
-
-                            boolean check=response.has("status");
-
-                            if(check){
-                                status=response.getString("status");
-
-                                if (status.equals("LS")){
-
-                                    String id=response.getString("id");
-                                    String name=response.getString("name");
-
-
-                                    if(response.has("id")){
-
-                                        GlobalController.appLoginID=response.getString("id");
-
-                                    }
-                                    else {
-
-                                    }
-
-
-
-
-
-                                    /*currentUserModel= globalController.getCurrentUserDetails(ActivitySingIn.this);*/
-
-
-
-
-
-
-
-                                }
-                                /*Toast.makeText(SignupActivity.this,MESSAGE,Toast.LENGTH_LONG).show();
-                                System.out.println(MESSAGE);*/
-                            }else{
-
-
-
-
-                               /* Intent intent=new Intent(SignupActivity.this,ActivityEventsList.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);*/
 
 
                             }
@@ -164,12 +116,10 @@ public class LoginControl extends Application {
 
         };
 
-        // Adding request to request queue
-       /* AppController.getInstance().addToRequestQueue(jsonObjReq,tag_json_obj);*/
+       
         ApiRequestSingleton.getInstance(context).addToRequestQueue(jsonObjReq);
 
-        // Cancelling request
-        // ApplicationController.getInstance().getRequestQueue().cancelAll(tag_json_obj);
+        ApplicationController.getInstance().getRequestQueue().cancelAll(tag_json_obj);
     }
 }
 
