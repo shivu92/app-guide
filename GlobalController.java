@@ -204,13 +204,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 
                         try {
-                            /*JSONObject jsonObject = new JSONObject(response);*/
-                           /*JSONArray jsonArray=new JSONArray(response);*/
-                            JSONObject myObject = new JSONObject(response);
-                            String ip=myObject.getString("ip");
-
-                            GlobalController.divice_ip=ip;
-
+                           
                         } catch (JSONException e) {
 
                         }
