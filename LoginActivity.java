@@ -183,11 +183,9 @@ public class LoginActivity extends AppCompatActivity {
         /*showProgressDialog();*/
         Map<String, String> params= new HashMap<String, String>();
 
-        params.put("key",GlobalController.API_KEY);
+        
         params.put("email_id", email);
-        params.put("password",password);
-        params.put("ip", GlobalController.divice_ip);
-
+        
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 GlobalController.API_SIGNIN, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
@@ -196,88 +194,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
 
-                            boolean check=response.has("status");
-
-                            if(check){
-                                MESSAGE=response.getString("status");
-
-                                /*if (MESSAGE.equals("LS")){
-
-                                    String id=response.getString("id");
-                                    String name=response.getString("name");
-
-                                     if(response.has("id")){
-
-                                         globalController= (GlobalController) getApplication();
-
-                                          GlobalController.appLoginID=response.getString("id");
-                                         globalController.localStoreLoginInfo(LoginActivity.this,email,password,name);
-                                         progressDialog.dismiss();
-                                         Intent intent=new Intent(LoginActivity.this,HomeActivity.class);
-                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                         intent.putExtra("USER_ID", GlobalController.appLoginID);
-                                         startActivity(intent);
-                                         finish();
-
-                                     }
-                                     else {
-                                         Toast.makeText(getBaseContext(),"Login Failed!",Toast.LENGTH_SHORT).show();
-                                         startActivity(new Intent(LoginActivity.this,JobSearchActivity.class));
-
-                                     }
-
-
-
-                                }*/
-
-                                switch(MESSAGE){
-                                    case "LS":
-                                        String id=response.getString("id");
-                                        String name=response.getString("name");
-                                        globalController= (GlobalController) getApplication();
-
-                                        GlobalController.appLoginID=response.getString("id");
-                                        globalController.localStoreLoginInfo(LoginActivity.this,email,password,name);
-
-                                        progressDialog.dismiss();
-                                        Intent intent=new Intent(LoginActivity.this,HomeActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        intent.putExtra("USER_ID", GlobalController.appLoginID);
-                                        startActivity(intent);
-                                        finish();
-                                        break;  //optional
-                                    case "ENV":
-                                        Toast.makeText(getBaseContext(),"Account Inactive, please verify your email_address to activate your account.", Toast.LENGTH_LONG).show();
-                                        break;  //optional
-
-                                    case "AF":
-                                        Toast.makeText(getBaseContext(),"Invalid Usename or Password.", Toast.LENGTH_LONG).show();
-                                        break;  //optional
-
-                                    case "AB":
-                                        Toast.makeText(getBaseContext(),"account blocked", Toast.LENGTH_LONG).show();
-                                        break;
-                                    default:
-                                        Toast.makeText(getBaseContext(),"Login Failed!",Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(LoginActivity.this,JobSearchActivity.class));
-                                }
-                                /*Toast.makeText(SignupActivity.this,MESSAGE,Toast.LENGTH_LONG).show();
-                                System.out.println(MESSAGE);*/
-                            }else{
-
-
-                               /* Intent intent=new Intent(SignupActivity.this,ActivityEventsList.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);*/
-
-                                Intent intent=new Intent(LoginActivity.this,NetworkInfo.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-
+                           
 
 
                             }
@@ -286,10 +203,7 @@ public class LoginActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             Log.e(GlobalController.LOG_JSonException_TAG, "JSONException:" + e);
                             Toast.makeText(getBaseContext(),"Login Failed!",Toast.LENGTH_SHORT).show();
-                            Intent intent=new Intent(LoginActivity.this,NetworkInfo.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
+                            
                         }
 
                     }
@@ -299,10 +213,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 Toast.makeText(getBaseContext(),"Login Failed!",Toast.LENGTH_SHORT).show();
-                Intent intent=new Intent(LoginActivity.this,NetworkInfo.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                
                 /*hideProgressDialog();*/
             }
         }) {
@@ -325,8 +236,7 @@ public class LoginActivity extends AppCompatActivity {
        /* AppController.getInstance().addToRequestQueue(jsonObjReq,tag_json_obj);*/
         ApiRequestSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
 
-        // Cancelling request
-        // ApplicationController.getInstance().getRequestQueue().cancelAll(tag_json_obj);
+        
     }
 }
 
