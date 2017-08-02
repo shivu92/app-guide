@@ -1,181 +1,109 @@
-import android.content.Intent;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.telephony.gsm.GsmCellLocation;
-import android.util.Log;
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.StringRequest;
-import com..R;
-import com.GlobalController;
-import com.model.ApiRequestSingleton;
-import com.model.LoginControl;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import .R;
+import .GetDataAdapter;
+import .ServerImageParseAdapter;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.Iterator;
+import java.util.List;
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-import java.io.UnsupportedEncodingException;
+    Context context;
 
-public class MainActivity extends AppCompatActivity {
-    String TAG="MainActivity.class";
-    private String MESSAGE;
-    Button button;
-    private static int SPLASH_TIME_OUT = 5000;
-    GlobalController global;
-    private LoginControl loginControl;
+    List<GetDataAdapter> getDataAdapter;
 
-    private void initialization(){
+    ImageLoader imageLoader1;
 
-      /*  button= (Button) findViewById(R.id.button_dummy);*/
+    public RecyclerViewAdapter(List<GetDataAdapter> getDataAdapter, Context context){
+
+        super();
+        this.getDataAdapter = getDataAdapter;
+        this.context = context;
     }
 
-
+    public RecyclerViewAdapter(List<GetDataAdapter> getDataAdapter1) {
+        this.getDataAdapter=getDataAdapter1;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        //GETTING IP
-        GlobalController.getIp(MainActivity.this);
-        /*getIp();*/
-        //GET USER ID
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_items, parent, false);
 
+        ViewHolder viewHolder = new ViewHolder(v);
 
+        return viewHolder;
+    }
 
-        initialization();
+    @Override
+    public void onBindViewHolder(ViewHolder Viewholder, int position) {
 
+        GetDataAdapter getDataAdapter1 =  getDataAdapter.get(position);
 
+        imageLoader1 = ServerImageParseAdapter.getInstance(context).getImageLoader();
 
-        /*button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent =new Intent(MainActivity.this,HomeActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });*/
+        imageLoader1.get(getDataAdapter1.getImageServerUrl(),
+                ImageLoader.getImageListener(
+                        Viewholder.networkImageView,//Server Image
+                        R.mipmap.ic_launcher,//Before loading server image the default showing image.
+                        android.R.drawable.ic_dialog_alert //Error image if requested image dose not found on server.
+                )
+        );
 
-        global= (GlobalController) getApplicationContext();
+        Viewholder.networkImageView.setImageUrl(getDataAdapter1.getImageServerUrl(), imageLoader1);
 
-        new Handler().postDelayed(new Runnable() {
+        //default image load
 
-            /*
-             * Showing splash screen with a timer. This will be useful when you
-             * want to show case your app logo / company
-*/
+        //set views
+        Viewholdertitle1.setText(getDataAdapter1.getJobTitle());
+        
 
-            //@Override
-            public void run() {
-                // This method will be executed once the timer is over
-                // Start your app main activity
-                // Intent i = new Intent(ActivitySplash.this, ActivityHome.class);
-                //startActivity(i);
-
-                if(global.isSignedIn(MainActivity.this)){
-
-                    loginControl=LoginControl.getLoginControl();
-                    loginControl.getUserId(MainActivity.this);
-                    
-                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                }
-                else{
-                    Intent intent = new Intent(MainActivity.this,JobSearchActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                }
-
-                // close this activity
-                finish();
-            }
-        }, SPLASH_TIME_OUT);
 
     }
 
-    /*private void getIp(){
-        StringRequest stringRequest= new StringRequest(Request.Method.GET, GlobalController.API_GET_IP,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+    @Override
+    public int getItemCount() {
+
+        return getDataAdapter.size();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder{
+
+        public TextView title1;
+        public NetworkImageView networkImageView;
+
+        public ViewHolder(View itemView) {
+
+            super(itemView);
+             //set views
+            title1 = (TextView) itemView.findViewById(R.id_title1);
+            
 
 
-                        try {
-                            *//*JSONObject jsonObject = new JSONObject(response);*//*
-                           *//*JSONArray jsonArray=new JSONArray(response);*//*
-                            JSONObject myObject = new JSONObject(response);
-                            String ip=myObject.getString("ip");
+            networkImageView = (NetworkImageView) itemView.findViewById(R.id.VollyNetworkImageView1) ;
+          /*  imgexperience1= (NetworkImageView) itemView.findViewById(R.id.experience1);
+            imgPayScale1= (NetworkImageView) itemView.findViewById(R.id.PayScale>1);
+            imgActive1= (NetworkImageView) itemView.findViewById(R.id.Active1);*/
 
-                            GlobalController.divice_ip=ip;
+        }
+    }
 
-                        } catch (JSONException e) {
+    String concatList(List<String> sList, String separator)
+    {
+        Iterator<String> iter = sList.iterator();
+        StringBuilder sb = new StringBuilder();
 
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-
-                // As of f605da3 the following should work
-                NetworkResponse response = error.networkResponse;
-                if (error instanceof ServerError && response != null) {
-                    try {
-                        String res = new String(response.data,
-                                HttpHeaderParser.parseCharset(response.headers, "utf-8"));
-                        // Now you can use any deserializer to make sense of data
-                        JSONObject obj = new JSONObject(res);
-                        boolean check=obj.has("message");
-
-                        if(check){
-                            MESSAGE=obj.getString("status");
-
-                        }
-                    } catch (UnsupportedEncodingException e1) {
-                        // Couldn't properly decode data to string
-                        e1.printStackTrace();
-                    } catch (JSONException e2) {
-                        // returned data is not JSONObject?
-                        e2.printStackTrace();
-                    }
-                }
-
-
-
-
-            }
-        }){
-
-
-           *//* @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> params = new HashMap<String, String>();
-                // Removed this line if you dont need it or Use application/json
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                return params;
-            }*//*
-        };
-
-*//*  int socketTimeout = 50000;//50 seconds to wait for the response - change to what you want
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);*//*
-        *//*ApiRequestSingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);*//*
-        ApiRequestSingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
-
-    }*/
+        while (iter.hasNext())
+        {
+            sb.append(iter.next()).append( iter.hasNext() ? separator : "");
+        }
+        return sb.toString();
+    }
 }
