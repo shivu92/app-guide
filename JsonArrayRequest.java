@@ -1,10 +1,10 @@
  
  //json Array request
- private void getJObs() {
+ private void getDatas() {
         Map<String, String> params= new HashMap<String, String>();
 
         params.put("key", GlobalController.API_KEY);
-        params.put("ip", GlobalController.divice_ip);
+        
        
         /* params.put("id", GlobalController.appLoginID);*/
 
@@ -33,23 +33,9 @@
                                 if(job.has("status")){
 
 
-                                    GetDataAdapter2.setJobId(job.getInt("job_id"));
+                                    GetDataAdapter2.setId();
 
-                                    GetDataAdapter2.setJobTitle(job.getString("job_title"));
-
-                                    GetDataAdapter2.setCompanyName(job.getString("company_name"));
-                                    GetDataAdapter2.setImageServerUrl(job.getString("logo"));
-
-
-
-                                    GetDataAdapter2.setExperienceMin(job.getString("experience_years_f"));
-                                    GetDataAdapter2.setExperienceMax(job.getString("experience_years_t"));
-
-                                    GetDataAdapter2.setActive(job.getString("last_active"));
-                                    GetDataAdapter2.setImageServerUrl("http://365innovative.com/img/logo.png");
-                                    GetDataAdapter2.setPayscaleMin(job.getString("payscale_from"));
-                                    GetDataAdapter2.setPayscaleMax(job.getString("payscale_to"));
-
+                                    
                                     List<String> skills=new ArrayList<String>();
                                     List<String> locations=new ArrayList<String>();
 
@@ -127,10 +113,7 @@
         Map<String, String> params= new HashMap<String, String>();
 
         params.put("key",GlobalController.API_KEY);
-        params.put("email_id", email);
-        params.put("password",password);
-        params.put("ip", GlobalController.divice_ip);
-
+        
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 GlobalController.API_SIGNIN, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
@@ -211,10 +194,6 @@
                             }else{
 
 
-                               /* Intent intent=new Intent(SignupActivity.this,ActivityEventsList.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);*/
 
                                 Intent intent=new Intent(LoginActivity.this,NetworkInfo.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
